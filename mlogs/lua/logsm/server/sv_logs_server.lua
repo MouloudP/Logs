@@ -17,11 +17,11 @@ hook.Add("PlayerInitialSpawn","PlayerInitialSpawn::LogsAdd", function(ply)
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a rejoint le serveur", Categorie = "Spawn", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -35,11 +35,11 @@ hook.Add("PlayerDeath","PlayerDeath::LogsAdd", function(victim, ent, attacker)
   if victim == attacker or attacker:IsWorld() then
 
     tbl.info = {text1 = "Le Joueur " .. victim:Nick() .. " [" .. team.GetName(victim:Team()) .. "]" .. " s'est suicidé !", Categorie = "Death", time = timeToStr(os.time()), Concerné ={victim:SteamID()}}
-    if istable(logs.joueur[victim:SteamID()]) then
-      table.insert(logs.joueur[victim:SteamID()],tbl.info)
+    if istable(logs.Player[victim:SteamID()]) then
+      table.insert(logs.Player[victim:SteamID()],tbl.info)
     else
-      logs.joueur[victim:SteamID()] = {}
-      table.insert(logs.joueur[victim:SteamID()],tbl.info)
+      logs.Player[victim:SteamID()] = {}
+      table.insert(logs.Player[victim:SteamID()],tbl.info)
     end
 
   else
@@ -48,18 +48,18 @@ hook.Add("PlayerDeath","PlayerDeath::LogsAdd", function(victim, ent, attacker)
 
     tbl.info = {text1 = "Le Joueur " .. victim:Nick() .. " [" .. team.GetName(victim:Team()) .. "]" .. " s'est fait tuer par " .. attacker:Nick() .. " [" .. team.GetName(attacker:Team()) .. "]" .. " avec une " .. attacker:GetActiveWeapon():GetClass(), Categorie = "Death", time = timeToStr(os.time()), Concerné ={victim:SteamID(), attacker:SteamID()}}
 
-    if istable(logs.joueur[victim:SteamID()]) then
-      table.insert(logs.joueur[victim:SteamID()],tbl.info)
+    if istable(logs.Player[victim:SteamID()]) then
+      table.insert(logs.Player[victim:SteamID()],tbl.info)
     else
-      logs.joueur[victim:SteamID()] = {}
-      table.insert(logs.joueur[victim:SteamID()],tbl.info)
+      logs.Player[victim:SteamID()] = {}
+      table.insert(logs.Player[victim:SteamID()],tbl.info)
     end
 
-    if istable(logs.joueur[attacker:SteamID()]) then
-      table.insert(logs.joueur[attacker:SteamID()],tbl.info)
+    if istable(logs.Player[attacker:SteamID()]) then
+      table.insert(logs.Player[attacker:SteamID()],tbl.info)
     else
-      logs.joueur[attacker:SteamID()] = {}
-      table.insert(logs.joueur[attacker:SteamID()],tbl.info)
+      logs.Player[attacker:SteamID()] = {}
+      table.insert(logs.Player[attacker:SteamID()],tbl.info)
     end
 
   end
@@ -72,11 +72,11 @@ hook.Add("PlayerSpawn","PlayerSpawn::LogsAdd", function(ply)
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a Respawn", Categorie = "Respawn", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -93,17 +93,17 @@ hook.Add("EntityTakeDamage","EntityTakeDamage::LogsAdd", function(victim, dmginf
 
   local tbl = {text1 = "Le Joueur " .. victim:Nick() .. " [" .. team.GetName(victim:Team()) .. "][" .. victim:GetActiveWeapon():GetClass() .. "] a pris " .. dmginfo:GetDamage() .. " de dégats par " .. attacker:Nick() .. " [" .. team.GetName(attacker:Team()) .. "][" .. attacker:GetActiveWeapon():GetClass() .. "]", Categorie = "damage1", time = timeToStr(os.time()), Concerné ={victim:SteamID(), attacker:SteamID()}}
 
-  if istable(logs.joueur[victim:SteamID()]) then
-    table.insert(logs.joueur[victim:SteamID()],tbl)
+  if istable(logs.Player[victim:SteamID()]) then
+    table.insert(logs.Player[victim:SteamID()],tbl)
   else
-    logs.joueur[victim:SteamID()] = tbl
+    logs.Player[victim:SteamID()] = tbl
   end
 
-  if istable(logs.joueur[attacker:SteamID()]) then
-    table.insert(logs.joueur[attacker:SteamID()],tbl)
+  if istable(logs.Player[attacker:SteamID()]) then
+    table.insert(logs.Player[attacker:SteamID()],tbl)
   else
-    logs.joueur[attacker:SteamID()] = {}
-    table.insert(logs.joueur[attacker:SteamID()],tbl)
+    logs.Player[attacker:SteamID()] = {}
+    table.insert(logs.Player[attacker:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -114,11 +114,11 @@ hook.Add("PlayerDisconnected","PlayerDisconnected::LogsAdds", function(ply)
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a déconnecté", Categorie = "Disconnect", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -130,11 +130,11 @@ hook.Add("playerDroppedMoney","playerDroppedMoney::LogsAdds", function(ply,amoun
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a jeté " .. amount .. "$", Categorie = "economie", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -146,18 +146,18 @@ hook.Add("playerGaveMoney","playerGaveMoney::LogsAdds", function(ply,ply2,amount
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a donné " .. amount .. "$ à " .. ply2:Nick() .. " [" .. team.GetName(ply2:Team()) .. "]", Categorie = "economie", time = timeToStr(os.time()), Concerné ={ply:SteamID(), ply2:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
-  if istable(logs.joueur[ply2:SteamID()]) then
-    table.insert(logs.joueur[ply2:SteamID()],tbl)
+  if istable(logs.Player[ply2:SteamID()]) then
+    table.insert(logs.Player[ply2:SteamID()],tbl)
   else
-    logs.joueur[ply2:SteamID()] = {}
-    table.insert(logs.joueur[ply2:SteamID()],tbl)
+    logs.Player[ply2:SteamID()] = {}
+    table.insert(logs.Player[ply2:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -169,11 +169,11 @@ hook.Add("playerPickedUpMoney","playerPickedUpMoney::LogsAdds", function(ply,amo
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a rammassé " .. amount .. "$", Categorie = "economie", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -186,11 +186,11 @@ hook.Add("lockpickStarted","lockpickStarted::LogsAdds", function(ply,ent)
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a commencer a lockipick la voiture de " .. ent:CPPIGetOwner():Nick() .. " [" .. team.GetName(ent:CPPIGetOwner():Team()) .. "]", Categorie = "lockpick", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -202,11 +202,11 @@ hook.Add("OnPlayerChangedTeam","OnPlayerChangedTeam::LogsAdds", function(ply,old
 
 local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " est passé de " .. team.GetName(old) .. " à " .. team.GetName(new), Categorie = "teamchange", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -217,11 +217,11 @@ hook.Add("onPlayerChangedName","onPlayerChangedName::LogsAdds", function(ply,old
 
 local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a changer de nom de " .. old .. " à " .. new, Categorie = "namechange", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -237,11 +237,11 @@ hook.Add("PlayerSwitchWeapon","PlayerSwitchWeapon::LogsAdds", function(ply,old,n
 
     local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a changer d'arme : de [" .. old:GetClass() .. "] à [" .. new:GetClass() .. "]", Categorie = "changeweap", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-      if istable(logs.joueur[ply:SteamID()]) then
-        table.insert(logs.joueur[ply:SteamID()],tbl)
+      if istable(logs.Player[ply:SteamID()]) then
+        table.insert(logs.Player[ply:SteamID()],tbl)
       else
-        logs.joueur[ply:SteamID()] = {}
-        table.insert(logs.joueur[ply:SteamID()],tbl)
+        logs.Player[ply:SteamID()] = {}
+        table.insert(logs.Player[ply:SteamID()],tbl)
       end
 
       table.insert(logs.All,tbl)
@@ -254,18 +254,18 @@ hook.Add("playerArrested","playerArrested::LogsAdds", function(ply,time,ply2)
 
   local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " [" .. team.GetName(ply:Team()) .. "]" .. " a été arrété pendant " .. time .. "s par " .. ply2:Nick() .. " [" .. team.GetName(ply2:Team()) .. "]", Categorie = "arrest", time = timeToStr(os.time()), Concerné ={ply:SteamID(), ply2:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
-  if istable(logs.joueur[ply2:SteamID()]) then
-    table.insert(logs.joueur[ply2:SteamID()],tbl)
+  if istable(logs.Player[ply2:SteamID()]) then
+    table.insert(logs.Player[ply2:SteamID()],tbl)
   else
-    logs.joueur[ply2:SteamID()] = {}
-    table.insert(logs.joueur[ply2:SteamID()],tbl)
+    logs.Player[ply2:SteamID()] = {}
+    table.insert(logs.Player[ply2:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -276,11 +276,11 @@ hook.Add("PlayerSay","PlayerSay::LogsAdds", function(ply,string)
 
 local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " a écrit : " .. string, Categorie = "sayp", time = timeToStr(os.time()), Concerné ={ply:SteamID()}}
 
-  if istable(logs.joueur[ply:SteamID()]) then
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+  if istable(logs.Player[ply:SteamID()]) then
+    table.insert(logs.Player[ply:SteamID()],tbl)
   else
-    logs.joueur[ply:SteamID()] = {}
-    table.insert(logs.joueur[ply:SteamID()],tbl)
+    logs.Player[ply:SteamID()] = {}
+    table.insert(logs.Player[ply:SteamID()],tbl)
   end
 
   table.insert(logs.All,tbl)
@@ -291,9 +291,9 @@ end)
 
 hook.Add("PlayerSay","SayCommande::OpenMenu",function(ply,string)
 
-  if string == logs.config.CommandeLogs then
+  if string == logs.Config.CommandeLogs then
 
-    if logs.config.Groupe[ply:GetUserGroup()] then
+    if logs.Config.Groupe[ply:GetUserGroup()] then
 
       local tbl1 = util.TableToJSON(logs)
       local tbl = util.Compress(tbl1)

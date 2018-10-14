@@ -65,7 +65,7 @@ net.Receive("Logs::OpenMenu",function()
       draw.RoundedBox(6, w / 45, h / 7.5, w / 6.8, h / 1.25, Color(107, 126, 255))
       draw.RoundedBox(6, w / 5.11, h / 7.5, w / 1.52, h / 1.25, Color(107, 126, 255))
       draw.RoundedBox(6, w / 1.16, h / 7.5, w / 8.3, h / 1.25, Color(107, 126, 255))
-      draw.DrawText(logs.config.Title, "FontLogsServeur4", w/2, h/50, Color(107, 126, 255), TEXT_ALIGN_CENTER)
+      draw.DrawText(logs.Config.Title, "FontLogsServeur4", w/2, h/50, Color(107, 126, 255), TEXT_ALIGN_CENTER)
       draw.DrawText(foncti.timeToStr(os.time()), "FontLogsServeur4", w/11, h/1.11, Color(255, 255, 255), TEXT_ALIGN_CENTER)
 
   end
@@ -113,7 +113,7 @@ net.Receive("Logs::OpenMenu",function()
   menu_logs.layout:SetSpaceX(0)
 
 
-  for k,v in pairs(logs.config.Categorie) do
+  for k,v in pairs(logs.Config.Categorie) do
 
     menu_logs.BouttonLogs = vgui.Create("DButton", menu_logs.layout)
     menu_logs.BouttonLogs:SetSize(menu_logs.panel3:GetWide(), menu_logs.panel3:GetTall() / 20)
@@ -201,7 +201,7 @@ function foncti.Fonction1(panel,tbl,id)
 
     for i,j in SortedPairs(tbl.All, true) do
 
-      if j.Categorie == logs.config.Categorie[id].sousnom or logs.config.Categorie[id].sousnom == "all" then
+      if j.Categorie == logs.Config.Categorie[id].sousnom or logs.Config.Categorie[id].sousnom == "all" then
 
         menu_logs.AllLogs = vgui.Create("DButton", menu_logs.layout)
         menu_logs.AllLogs:SetSize(foncti.panelLogs:GetWide() / 1.1, foncti.panelLogs:GetTall() / 17)
@@ -455,7 +455,7 @@ function foncti.Fonction3(panel,tbl)
   menu_logs.layoutModule:SetSpaceY(5)
   menu_logs.layoutModule:SetSpaceX(0)
 
-  for i, j in pairs(logs.config.Categorie) do
+  for i, j in pairs(logs.Config.Categorie) do
 
     menu_logs.PlayerBoutton = vgui.Create("DButton", menu_logs.layoutModule)
     menu_logs.PlayerBoutton:SetSize(menu_logs.panelLogsPlayer:GetWide(), menu_logs.panelLogsPlayer:GetTall() / 13)
@@ -548,7 +548,7 @@ function foncti.Fonction4(panel,tbl)
 
   menu_logs.DTextEntryLeVrai.OnEnter = function()
 
-      if istable(tbl.joueur[menu_logs.DTextEntryLeVrai:GetValue()]) then
+      if istable(tbl.Player[menu_logs.DTextEntryLeVrai:GetValue()]) then
 
         local steam = menu_logs.DTextEntryLeVrai:GetValue()
         foncti.Fonction7(panel, steam, tbl)
@@ -600,11 +600,11 @@ function foncti.Fonction5(panel,tbl,joueurchoose, id)
   menu_logs.layout:SetSpaceY(5)
   menu_logs.layout:SetSpaceX(0)
 
-  for valeur,f in SortedPairs(tbl.joueur[joueurchoose:SteamID()], true) do
+  for valeur,f in SortedPairs(tbl.Player[joueurchoose:SteamID()], true) do
 
     if not istable(f) then continue end
 
-    if f.Categorie == logs.config.Categorie[id].sousnom or logs.config.Categorie[id].sousnom == "all" then
+    if f.Categorie == logs.Config.Categorie[id].sousnom or logs.Config.Categorie[id].sousnom == "all" then
 
       menu_logs.AllLogs = vgui.Create("DButton", menu_logs.layout)
       menu_logs.AllLogs:SetSize(foncti.panelLogs:GetWide() / 1.1, foncti.panelLogs:GetTall() / 17)
@@ -672,7 +672,7 @@ function foncti.Fonction6(panel,id,tbl,id2)
     menu_logs.layoutinfo:SetSpaceY(5)
     menu_logs.layoutinfo:SetSpaceX(0)
 
-    local tbl = tbl.joueur[id]
+    local tbl = tbl.Player[id]
 
     for number,p in pairs(tbl[id2].Concerné) do
 
@@ -748,7 +748,7 @@ function foncti.Fonction7(panel, steam, tbl)
   menu_logs.layout:SetSpaceY(5)
   menu_logs.layout:SetSpaceX(0)
 
-    for idh,f in SortedPairs(tbl.joueur[steam], true) do
+    for idh,f in SortedPairs(tbl.Player[steam], true) do
 
       if not istable(f) then continue end
 
