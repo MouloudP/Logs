@@ -1,4 +1,9 @@
 util.AddNetworkString("Logs::OpenMenu")
+util.AddNetworkString("Logs::ChoosePlayer")
+util.AddNetworkString("Logs::ChoosePlayerSend")
+util.AddNetworkString("Logs::ChoosePlayerSendSteam")
+util.AddNetworkString("Logs::ChatAddText")
+util.AddNetworkString("Logs::UpLogs")
 
 local function timeToStr( time )
   local tnp = time
@@ -287,20 +292,34 @@ local tbl = {text1 = "Le Joueur " .. ply:Nick() .. " a écrit : " .. string, Cat
 
 end)
 
-
-
 hook.Add("PlayerSay","SayCommande::OpenMenu",function(ply,string)
 
   if string == logs.Config.CommandeLogs then
 
     if logs.Config.Groupe[ply:GetUserGroup()] then
 
-      local tbl1 = util.TableToJSON(logs)
+      local tbl = {}
+
+      ply.Numberlogs = 50
+
+      for k, v in pairs(logs.All) do
+
+        if k < ply.Numberlogs and k > ply.Numberlogs - 50 then
+
+          table.insert(tbl,v)
+
+        end
+
+      end
+
+      local tbl1 = util.TableToJSON(tbl)
       local tbl = util.Compress(tbl1)
 
       net.Start("Logs::OpenMenu")
       net.WriteFloat(#tbl1)
       net.WriteData(tbl, #tbl1)
+      net.WriteFloat(ply.Numberlogs)
+      net.WriteFloat(#logs.All)
       net.Send(ply)
 
       return ""
@@ -308,5 +327,70 @@ hook.Add("PlayerSay","SayCommande::OpenMenu",function(ply,string)
     end
 
   end
+
+end)
+
+net.Receive("Logs::ChoosePlayer",function(_,ply)
+
+  if not logs.Config.Groupe[ply:GetUserGroup()] then return end
+
+  if net.ReadBool() then
+
+    local tbl = net.ReadTable()
+
+    net.Start("Logs::ChoosePlayerSend")
+    net.WriteFloat(tbl.id1)
+    net.WriteTable(logs.Player[tbl.player:SteamID()])
+    net.Send(ply)
+
+  else
+
+    local steam = net.ReadString()
+
+    if istable(logs.Player[steam]) then
+
+      net.Start("Logs::ChoosePlayerSendSteam")
+      net.WriteTable(logs.Player[steam])
+      net.Send(ply)
+
+    else
+
+
+      net.Start("Logs::ChatAddText")
+      net.Send(ply)
+
+    end
+
+  end
+
+end)
+
+net.Receive("Logs::UpLogs",function(_,ply)
+
+  local number = net.ReadFloat()
+
+  ply.Numberlogs = ply.Numberlogs + number
+
+  local tbl = {}
+
+  for k, v in pairs(logs.All) do
+
+    if k < ply.Numberlogs and k > ply.Numberlogs - 50 then
+
+      table.insert(tbl,v)
+
+    end
+
+  end
+
+  local tbl1 = util.TableToJSON(tbl)
+  local tbl = util.Compress(tbl1)
+
+  net.Start("Logs::OpenMenu")
+  net.WriteFloat(#tbl1)
+  net.WriteData(tbl, #tbl1)
+  net.WriteFloat(ply.Numberlogs)
+  net.WriteFloat(#logs.All)
+  net.Send(ply)
 
 end)
