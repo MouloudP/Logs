@@ -28,7 +28,6 @@ surface.CreateFont( "FontLogsServeur5", {
 })
 
 local foncti = {}
-local User = {}
 
 function foncti.timeToStr( time )
   local tnp = time
@@ -48,8 +47,6 @@ net.Receive("Logs::OpenMenu",function()
   local float = net.ReadFloat()
   local tbl1 = util.Decompress(net.ReadData(float))
   local tbl = util.JSONToTable(tbl1)
-  local numberlogs = net.ReadFloat()
-  local Max = net.ReadFloat()
 
   local menu_logs = {}
 
@@ -70,11 +67,8 @@ net.Receive("Logs::OpenMenu",function()
       draw.RoundedBox(6, w / 1.16, h / 7.5, w / 8.3, h / 1.25, Color(107, 126, 255))
       draw.DrawText(logs.Config.Title, "FontLogsServeur4", w/2, h/50, Color(107, 126, 255), TEXT_ALIGN_CENTER)
       draw.DrawText(foncti.timeToStr(os.time()), "FontLogsServeur4", w/11, h/1.11, Color(255, 255, 255), TEXT_ALIGN_CENTER)
-      draw.DrawText("Page : " .. numberlogs / 50, "FontLogsServeur4", w/2.5, h/1.05, Color(107, 126, 255), TEXT_ALIGN_CENTER)
 
   end
-
-  foncti.Fonction1(menu_logs.BaseBox,tbl,1)
 
   menu_logs.close = vgui.Create("DButton", menu_logs.BaseBox)
   menu_logs.close:SetSize(ScrW()/30, ScrW()/80)
@@ -117,67 +111,6 @@ net.Receive("Logs::OpenMenu",function()
   menu_logs.layout:Dock(FILL)
   menu_logs.layout:SetSpaceY(5)
   menu_logs.layout:SetSpaceX(0)
-
-  if numberlogs > 50 then
-
-    menu_logs.LeftBoutton = vgui.Create("DButton", menu_logs.BaseBox)
-    menu_logs.LeftBoutton:SetSize(menu_logs.BaseBox:GetWide() / 50, menu_logs.BaseBox:GetWide() / 50)
-    menu_logs.LeftBoutton:SetPos(menu_logs.BaseBox:GetWide() / 3, menu_logs.BaseBox:GetTall() / 1.05)
-    menu_logs.LeftBoutton:SetText("")
-    menu_logs.LeftBoutton:SetTextColor(Color(0,0,0,255))
-    menu_logs.LeftBoutton.BtnColor = 30
-    menu_logs.LeftBoutton.HoverColor = Color(0,0,0)
-    menu_logs.LeftBoutton.Lerp = 0
-    menu_logs.LeftBoutton.LerpTxt = 0
-    menu_logs.LeftBoutton.Paint = function(self,w,h)
-
-      draw.RoundedBox(6, 0, 0, w, h, Color(107, 126, 255))
-      draw.RoundedBox(6, w/100, h/20, w/1.02, h/1.13, Color(255, 255, 255, 255))
-      draw.DrawText("<", "FontLogsServeur4", w/2, h/10, Color(107, 126, 255), TEXT_ALIGN_CENTER)
-
-    end
-
-
-    menu_logs.LeftBoutton.DoClick = function()
-
-      net.Start("Logs::UpLogs")
-      net.WriteFloat(-50)
-      net.SendToServer()
-      menu_logs.BaseBox:Remove()
-
-    end
-
-  end
-
-  if not (numberlogs + 50 > Max + 25) then
-
-    menu_logs.RightBoutton = vgui.Create("DButton", menu_logs.BaseBox)
-    menu_logs.RightBoutton:SetSize(menu_logs.BaseBox:GetWide() / 50, menu_logs.BaseBox:GetWide() / 50)
-    menu_logs.RightBoutton:SetPos(menu_logs.BaseBox:GetWide() / 2.1, menu_logs.BaseBox:GetTall() / 1.05)
-    menu_logs.RightBoutton:SetText("")
-    menu_logs.RightBoutton:SetTextColor(Color(0,0,0,255))
-    menu_logs.RightBoutton.BtnColor = 30
-    menu_logs.RightBoutton.HoverColor = Color(0,0,0)
-    menu_logs.RightBoutton.Lerp = 0
-    menu_logs.RightBoutton.LerpTxt = 0
-    menu_logs.RightBoutton.Paint = function(self,w,h)
-
-      draw.RoundedBox(6, 0, 0, w, h, Color(107, 126, 255))
-      draw.RoundedBox(6, w/100, h/20, w/1.02, h/1.13, Color(255, 255, 255, 255))
-      draw.DrawText(">", "FontLogsServeur4", w/2, h/10, Color(107, 126, 255), TEXT_ALIGN_CENTER)
-
-    end
-
-    menu_logs.RightBoutton.DoClick = function()
-
-      net.Start("Logs::UpLogs")
-      net.WriteFloat(50)
-      net.SendToServer()
-      menu_logs.BaseBox:Remove()
-
-    end
-
-  end
 
 
   for k,v in pairs(logs.Config.Categorie) do
@@ -266,7 +199,7 @@ function foncti.Fonction1(panel,tbl,id)
     menu_logs.layout:SetSpaceY(5)
     menu_logs.layout:SetSpaceX(0)
 
-    for i,j in SortedPairs(tbl, true) do
+    for i,j in SortedPairs(tbl.All, true) do
 
       if j.Categorie == logs.Config.Categorie[id].sousnom or logs.Config.Categorie[id].sousnom == "all" then
 
@@ -335,7 +268,7 @@ function foncti.Fonction1(panel,tbl,id)
      menu_logs.layoutinfo:SetSpaceY(5)
      menu_logs.layoutinfo:SetSpaceX(0)
 
-     local tbljoueur = tbl[id]
+     local tbljoueur = tbl.All[id]
 
      for number,p in pairs(tbljoueur.Concerné) do
 
@@ -545,15 +478,7 @@ function foncti.Fonction3(panel,tbl)
 
       if joueurchoose != "" then
 
-        local tbl = {id1 = i, player = joueurchoose}
-
-        net.Start("Logs::ChoosePlayer")
-        net.WriteBool(true)
-        net.WriteTable(tbl)
-        net.SendToServer()
-
-        User.Panel = panel
-      --  foncti.Fonction5(panel,tbl,joueurchoose, i)
+        foncti.Fonction5(panel,tbl,joueurchoose, i)
 
       end
 
@@ -566,6 +491,8 @@ end
 function foncti.Fonction4(panel,tbl)
 
   local menu_logs = {}
+
+  menu_logs.SteamidBool = false
 
   menu_logs.DTextEntrySupport = vgui.Create("DFrame", panel)
   menu_logs.DTextEntrySupport:SetSize(ScrW()/2, ScrH()/2)
@@ -580,6 +507,12 @@ function foncti.Fonction4(panel,tbl)
       draw.RoundedBox(6, w / 4.45, h / 6, w / 1.8, h / 2, Color(107, 126, 255))
       draw.DrawText("Recherche Avancé", "FontLogsServeur4", w/2, h/50, Color(107, 126, 255), TEXT_ALIGN_CENTER)
       draw.DrawText("Part SteamID32", "FontLogsServeur4", w/2, h/5.5, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+
+      if menu_logs.SteamidBool then
+
+        draw.DrawText("SteamID Inccorect", "FontLogsServeur4", w/2, h/14, Color(107, 126, 255), TEXT_ALIGN_CENTER)
+
+      end
 
   end
 
@@ -615,28 +548,23 @@ function foncti.Fonction4(panel,tbl)
 
   menu_logs.DTextEntryLeVrai.OnEnter = function()
 
-      local steam = menu_logs.DTextEntryLeVrai:GetValue()
+      if istable(tbl.Player[menu_logs.DTextEntryLeVrai:GetValue()]) then
 
-      net.Start("Logs::ChoosePlayer")
-      net.WriteBool(false)
-      net.WriteString(steam)
-      net.SendToServer()
-    --  foncti.Fonction7(panel, steam, tbl)
-      menu_logs.DTextEntrySupport:Remove()
+        local steam = menu_logs.DTextEntryLeVrai:GetValue()
+        foncti.Fonction7(panel, steam, tbl)
+        menu_logs.DTextEntrySupport:Remove()
 
-      User.Panel = panel
+      else
+
+        menu_logs.SteamidBool = true
+
+      end
 
    end
 
 end
 
---function foncti.Fonction5(panel,tbl,joueurchoose, id)
-
-net.Receive("Logs::ChoosePlayerSend",function()
-
-  local id = net.ReadFloat()
-  local tbl = net.ReadTable()
-  local panel = User.Panel
+function foncti.Fonction5(panel,tbl,joueurchoose, id)
 
   local menu_logs = {}
 
@@ -672,7 +600,7 @@ net.Receive("Logs::ChoosePlayerSend",function()
   menu_logs.layout:SetSpaceY(5)
   menu_logs.layout:SetSpaceX(0)
 
-  for valeur,f in SortedPairs(tbl, true) do
+  for valeur,f in SortedPairs(tbl.Player[joueurchoose:SteamID()], true) do
 
     if not istable(f) then continue end
 
@@ -707,10 +635,10 @@ net.Receive("Logs::ChoosePlayerSend",function()
 
   end
 
-end)
+end
 
 
-function foncti.Fonction6(panel,tbl,id2)
+function foncti.Fonction6(panel,id,tbl,id2)
 
   local menu_logs = {}
 
@@ -743,6 +671,8 @@ function foncti.Fonction6(panel,tbl,id2)
     menu_logs.layoutinfo:Dock(FILL)
     menu_logs.layoutinfo:SetSpaceY(5)
     menu_logs.layoutinfo:SetSpaceX(0)
+
+    local tbl = tbl.Player[id]
 
     for number,p in pairs(tbl[id2].Concerné) do
 
@@ -783,10 +713,8 @@ function foncti.Fonction6(panel,tbl,id2)
 
 end
 
-net.Receive("Logs::ChoosePlayerSendSteam",function()
 
-  local panel = User.Panel
-  local tbl = net.ReadTable()
+function foncti.Fonction7(panel, steam, tbl)
 
   local menu_logs = {}
 
@@ -820,7 +748,7 @@ net.Receive("Logs::ChoosePlayerSendSteam",function()
   menu_logs.layout:SetSpaceY(5)
   menu_logs.layout:SetSpaceX(0)
 
-    for idh,f in SortedPairs(tbl, true) do
+    for idh,f in SortedPairs(tbl.Player[steam], true) do
 
       if not istable(f) then continue end
 
@@ -845,16 +773,10 @@ net.Receive("Logs::ChoosePlayerSendSteam",function()
 
       menu_logs.AllLogs.DoClick = function()
 
-        foncti.Fonction6(panel,tbl,idh)
+        foncti.Fonction6(panel,steam,tbl,idh)
 
       end
 
     end
 
-  end)
-
-net.Receive("Logs::ChatAddText",function()
-
-  chat.AddText(Color(255,255,255), "[", Color(255,0,0), "NOTIFICATION", Color(255,255,255), "]", Color(255,255,255), " Steam ID Incorrect")
-
-end)
+  end
